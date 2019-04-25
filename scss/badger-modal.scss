@@ -1,0 +1,32 @@
+.badger-modal-background {
+    display: none;
+
+    &--active {
+        background-color: rgba(0, 0, 0, 0.45);
+        bottom: 0;
+        display: block;
+        left: 0;
+        position: fixed;
+        top: 0;
+        right: 0;
+    }
+}
+
+
+
+
+.badger-modal {
+    border: solid 2px #c2c2c2;
+    background-color: #fff;
+    display: flex;
+    flex-direction: column;
+    margin: 20px;
+    padding: 20px;
+    max-width: 600px;
+}
+
+.badger-modal__close-btn {
+        display: flex;
+    margin-left: auto;
+    margin-right: 0;
+}

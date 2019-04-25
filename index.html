@@ -5,24 +5,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
-</head>
-<body>
+    
+    <style>
+        html,
+        body {
+            font-family: 'Helvetica Neue', sans-serif;
+        }
+    </style>
+    <link rel="stylesheet" href="css/badger-modal.css">
+<body class="badger-modal-background badger-modal-background--active">
     <button onclick="openDialog('dialog1', this)">Add Delivery Address</button>
 
 
-    <div class="dialog-backdrop active">
-        <div tabindex="0"></div>
-        <div role="dialog" id="dialog1" aria-labelledby="dialog1_label" aria-modal="true" class="default_dialog">
-            <h2 id="dialog1_label" class="dialog_label">Add Delivery Address</h2>
-            
+    <!-- <div tabindex="0"></div> -->
 
+    <div role="dialog" aria-labelledby="modal-label" aria-modal="true" class="js-badger-modal badger-modal">
+        <header class="js-badger-modal-header badger-modal__header">
+            <button class="js-badger-modal-close-button badger-modal__close-btn">Close X</button>
+        </header>
 
-            <div class="dialog_form_actions">
-                <button onclick="closeDialog(this)">Cancel</button>
-            </div>
-        </div>
-        <div tabindex="0"></div>
+        <h2 id="modal-label">Badger Dialog is accessible, extensilbe and super light weight!</h2>
     </div>
+    
+    <!-- <div tabindex="0"></div> -->
+    
 
     <script src="./js/main.js"></script>
 </body>
