@@ -4,11 +4,12 @@
   "description": "",
   "main": "./js/main.js",
   "scripts": {
-    "dev": "rollup ./js/behaviour.js --file ./js/main.js --watch  --format iife"
+    "dev": "NODE_ENV=develop ./node_modules/.bin/rollup -c --watch"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "rollup": "^1.10.1"
+    "rollup": "^1.10.1",
+    "rollup-plugin-scss": "^1.0.1"
   }
 }
