@@ -1,0 +1,14 @@
+{
+  "name": "badger-modal",
+  "version": "0.0.1",
+  "description": "",
+  "main": "./js/main.js",
+  "scripts": {
+    "dev": "rollup ./js/behaviour.js --file ./js/main.js --watch  --format iife"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "rollup": "^1.10.1"
+  }
+}
