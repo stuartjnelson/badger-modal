@@ -14,7 +14,8 @@ class BadgerModal {
         this.el = el;
 
         const defaults = {
-            activeClass: '-item-active',
+            nameSpace: 'badger-modal',
+            get activeClass() { return  `${this.nameSpace}--active` }
         };
 
         // Merging options with defaults
@@ -26,7 +27,7 @@ class BadgerModal {
     init() {
         this.addListeners();
 
-        console.log('Testing using Rollup');
+        console.log(this.settings.activeClass );
     }
 
     addListeners() { }
