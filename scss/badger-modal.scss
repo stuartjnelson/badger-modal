@@ -45,8 +45,12 @@
 
 }
 
-.badger-modal__close-btn {
-    display: flex;
-    margin-left: auto;
-    margin-right: 0;
+.badger-modal__trigger {
+    scroll-behavior: smooth;
+
+    &--close {
+        display: flex;
+        margin-left: auto;
+        margin-right: 0;
+    }
 }
