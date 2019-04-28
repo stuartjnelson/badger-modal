@@ -19,6 +19,8 @@
   max-width: 600px;
   padding: 20px;
   z-index: 1000; }
+  .badger-modal:focus {
+    outline: solid #3498db 2px; }
   .badger-modal--initalized {
     left: 50%;
     position: absolute;

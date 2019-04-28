@@ -87,6 +87,7 @@
         _setupAttributes() {
             this.modalEl.setAttribute("aria-modal", true);
             this.modalEl.setAttribute("role", "dialog");
+            this.modalEl.setAttribute("tabIndex", "0");
 
             // @REVIEW: aria-labelledby needs to be in here as fallback...
         }
@@ -98,8 +99,10 @@
                     e.preventDefault();
 
                     const triggerElement = trigger.nodeName;
-                    const modalSelector = (triggerElement === 'A' ? trigger.getAttribute("href") : trigger.getAttribute("data-badger-modal-id"));
-
+                    const modalSelector =
+                        triggerElement === "A"
+                            ? trigger.getAttribute("href")
+                            : trigger.getAttribute("data-badger-modal-id");
 
                     this.toggleModal(modalSelector);
                 });
@@ -131,15 +134,18 @@
         }
 
         // @TODO:
+        // https://developer.paciellogroup.com/blog/2018/06/the-current-state-of-modal-dialog-accessibility/
         // ** General **
         // Aside from open, closing, toggling and modal state, whatother methods would you use?
         // How would you expect a modal to be positioned by default?
         // How would you want to position your modal? * Adding class to modal * Custom CSS * Other
 
-
         // ** JS **
-        // Move focus after closing modal
-        // Moving focus on open to next focusable element inside modal
+        // When open move focus to the modal itself
+        // Disable being able to `tab` to any content that isnt the modal when it is open
+        // Move focus after closing modal to element that opened it. If this isn't
+        // possible then move focus to somewhere logical...
+
         // When tabbing inside modal then moving focus from last focusable element to next focusable element
 
         toggleModal(modalSelector) {
@@ -161,11 +167,15 @@
             // Set container to be visible
             this._toggleContainer();
 
+            this.modalEl.setAttribute("tabIndex", "-1");
+
             // Make container active
             this.containerEl.classList.add(this.settings.containerActiveClass);
 
             // Add class to modal
             this.modalEl.classList.add(this.settings.activeClass);
+
+            this.modalEl.focus();
         }
 
         closeModal() {
@@ -175,10 +185,14 @@
             // Set container to be visible
             this._toggleContainer(false);
 
+            this.modalEl.setAttribute("tabIndex", "0");
+
             this.containerEl.classList.remove(this.settings.containerActiveClass);
 
             // Add class to modal
             this.modalEl.classList.remove(this.settings.activeClass);
+
+            // Move focus to trigger element
         }
 
         // get getModalStatus() {

@@ -48,6 +48,8 @@
     padding: 20px;
     z-index: 1000;
 
+    &:focus { outline: solid #3498db 2px; }
+
     &--initalized {
         left: 50%;
         position: absolute;
