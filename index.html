@@ -23,16 +23,19 @@
 <body class="badger-modal-background">
     <a href="#badger-modal-1" class="badger-modal__trigger btn js-badger-modal-trigger">Open modal</a>
 
+    <a href="#badger-modal-2" class="badger-modal__trigger btn js-badger-modal-trigger">Open modal thats not 1</a>
+
     <p>
         Lorem ipsum dolor sit amet consectetur adipisicing elit. Veniam incidunt repellat at, molestiae animi laudantium sunt? Iusto quaerat laboriosam voluptatibus, debitis ex, asperiores modi necessitatibus ipsum delectus ullam, animi consequatur.
     </p>
 
     <!-- <div tabindex="0"></div> -->
 
+    <!-- Need container element for overflow -->
     <div class="js-badger-modal-container badger-modal-container">
         <div id="badger-modal-1" class="js-badger-modal badger-modal">
             <header class="js-badger-modal-header badger-modal__header">
-                <button class="js-badger-modal-trigger badger-modal__trigger--close">Close X</button>
+                <button class="js-badger-modal-trigger badger-modal__trigger--close" data-badger-modal-id="#badger-modal-1">Close X</button>
             </header>
     
             <h2 id="modal-label">Badger Dialog is accessible, extensilbe and super light weight!</h2>

@@ -16,9 +16,7 @@ class BadgerModal {
         // If el is not defined
         if (modalEl === null) {
             console.log(
-                new Error(
-                    `Modal container ${modalEl} element cannot be found`
-                )
+                new Error(`Modal container ${modalEl} element cannot be found`)
             );
         }
 
@@ -52,17 +50,15 @@ class BadgerModal {
 
         // Setting up data
         this.modalEl = modalEl;
-        this.containerId = this.modalEl.getAttribute("id");     
+        this.containerId = this.modalEl.getAttribute("id");
         this.containerEl =
             this.settings.containerSelector !== undefined
-                ? document.querySelector(
-                      this.settings.containerSelector
-                  )
+                ? document.querySelector(this.settings.containerSelector)
                 : console.log(
                       new Error`your container element ${
                           this.settings.containerSelector
                       } cannont be found`()
-                  );     
+                  );
         this.triggers =
             this.settings.triggerClass !== undefined
                 ? Array.from(
@@ -98,7 +94,11 @@ class BadgerModal {
             trigger.addEventListener("click", e => {
                 e.preventDefault();
 
-                this.toggleModal();
+                const triggerElement = trigger.nodeName;
+                const modalSelector = (triggerElement === 'A' ? trigger.getAttribute("href") : trigger.getAttribute("data-badger-modal-id"));
+
+
+                this.toggleModal(modalSelector);
             });
         });
     }
@@ -109,14 +109,22 @@ class BadgerModal {
 
     _toggleContainer(toggle = true) {
         if (toggle) {
-            this.containerEl.classList.add(
-                this.settings.containerActiveClass
-            );
+            this.containerEl.classList.add(this.settings.containerActiveClass);
         } else {
             this.containerEl.classList.remove(
                 this.settings.containerActiveClass
             );
         }
+    }
+
+    _checkIfBadgerModal(selector) {
+        const modal = document.querySelector(selector);
+
+        return (
+            (modal !== null &&
+                modal.classList.contains(this.settings.initalizedClass)) ||
+            false
+        );
     }
 
     // @TODO:
@@ -129,11 +137,15 @@ class BadgerModal {
     // Moving focus on open to next focusable element inside modal
     // When tabbing inside modal then moving focus from last focusable element to next focusable element
 
-    toggleModal() {
-        if (this.state) {
-            this.closeModal();
-        } else {
-            this.openModal();
+    toggleModal(modalSelector) {
+        // debugger;
+
+        if (this._checkIfBadgerModal(modalSelector)) {
+            if (this.state) {
+                this.closeModal(modalSelector);
+            } else {
+                this.openModal(modalSelector);
+            }
         }
     }
 
@@ -158,9 +170,7 @@ class BadgerModal {
         // Set container to be visible
         this._toggleContainer(false);
 
-        this.containerEl.classList.remove(
-            this.settings.containerActiveClass
-        );
+        this.containerEl.classList.remove(this.settings.containerActiveClass);
 
         // Add class to modal
         this.modalEl.classList.remove(this.settings.activeClass);
