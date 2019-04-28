@@ -1,4 +1,4 @@
 import BadgerModal from './badger-modal';
 import '../scss/badger-modal.scss';
 
-new BadgerModal();
+new BadgerModal('.js-badger-modal');
