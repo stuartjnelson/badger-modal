@@ -10,14 +10,14 @@
  */
 class BadgerModal {
     constructor(el, options) {
-        const containerEl =
+        const modalEl =
             typeof el === "string" ? document.querySelector(el) : el;
 
         // If el is not defined
-        if (containerEl === null) {
+        if (modalEl === null) {
             console.log(
                 new Error(
-                    `Modal container ${containerEl} element cannot be found`
+                    `Modal container ${modalEl} element cannot be found`
                 )
             );
         }
@@ -28,12 +28,14 @@ class BadgerModal {
                 return `${this.nameSpace}--active`;
             },
 
-            backgroundSelector: "body",
-            get backgroundClass() {
-                return `${this.nameSpace}-background`;
+            get containerClass() {
+                return `${this.nameSpace}-container`;
             },
-            get backgroundActiveClass() {
-                return `${this.backgroundClass}--active`;
+            get containerSelector() {
+                return `.js-${this.containerClass}`;
+            },
+            get containerActiveClass() {
+                return `${this.containerClass}--active`;
             },
             get initalizedClass() {
                 return `${this.nameSpace}--initalized`;
@@ -42,31 +44,29 @@ class BadgerModal {
                 return `.js-${this.nameSpace}-trigger`;
             },
 
-            openOnLoad: false,
+            openOnLoad: false
         };
 
         // Merging options with defaults
         this.settings = Object.assign({}, defaults, options);
 
         // Setting up data
-        this.container = containerEl;
-        this.containerId = this.container.getAttribute("id");
-        this.backgroundEl =
-            this.settings.backgroundSelector !== undefined
+        this.modalEl = modalEl;
+        this.containerId = this.modalEl.getAttribute("id");     
+        this.containerEl =
+            this.settings.containerSelector !== undefined
                 ? document.querySelector(
-                      this.settings.backgroundSelector
+                      this.settings.containerSelector
                   )
                 : console.log(
-                      new Error`your background element ${
-                          this.settings.backgroundSelector
-                      } cannont be found`
-                  );           
+                      new Error`your container element ${
+                          this.settings.containerSelector
+                      } cannont be found`()
+                  );     
         this.triggers =
             this.settings.triggerClass !== undefined
                 ? Array.from(
-                      document.querySelectorAll(
-                          this.settings.triggerClass
-                      )
+                      document.querySelectorAll(this.settings.triggerClass)
                   )
                 : undefined;
         this.state = this.settings.openOnLoad || false;
@@ -86,8 +86,8 @@ class BadgerModal {
 
     // #setupAttributes() {
     _setupAttributes() {
-        this.container.setAttribute("aria-modal", true);
-        this.container.setAttribute("role", "dialog");
+        this.modalEl.setAttribute("aria-modal", true);
+        this.modalEl.setAttribute("role", "dialog");
 
         // @REVIEW: aria-labelledby needs to be in here as fallback...
     }
@@ -95,7 +95,7 @@ class BadgerModal {
     addListeners() {
         // on click of trigger
         this.triggers.forEach(trigger => {
-            trigger.addEventListener('click', e => {
+            trigger.addEventListener("click", e => {
                 e.preventDefault();
 
                 this.toggleModal();
@@ -104,21 +104,33 @@ class BadgerModal {
     }
 
     _finishInitialization() {
-        this.container.classList.add(this.settings.initalizedClass);
+        this.modalEl.classList.add(this.settings.initalizedClass);
     }
 
-    _toggleBackground(toggle = true) {
-        if(toggle) {
-            this.backgroundEl.classList.add(this.settings.backgroundActiveClass);
+    _toggleContainer(toggle = true) {
+        if (toggle) {
+            this.containerEl.classList.add(
+                this.settings.containerActiveClass
+            );
         } else {
-            this.backgroundEl.classList.remove(
-                this.settings.backgroundActiveClass
+            this.containerEl.classList.remove(
+                this.settings.containerActiveClass
             );
         }
     }
 
+    // @TODO:
+    // ** General **
+    // How would you like your modal position?
+    // Aside from
+
+    // ** JS **
+    // Move focus after closing modal
+    // Moving focus on open to next focusable element inside modal
+    // When tabbing inside modal then moving focus from last focusable element to next focusable element
+
     toggleModal() {
-        if(this.state) {
+        if (this.state) {
             this.closeModal();
         } else {
             this.openModal();
@@ -129,24 +141,33 @@ class BadgerModal {
         // Update modals state
         this.state = true;
 
-        // Set background to be visible
-        this._toggleBackground();
+        // Set container to be visible
+        this._toggleContainer();
+
+        // Make container active
+        this.containerEl.classList.add(this.settings.containerActiveClass);
 
         // Add class to modal
-        this.container.classList.add(this.settings.activeClass);
+        this.modalEl.classList.add(this.settings.activeClass);
     }
 
     closeModal() {
         // Update modals state
         this.state = false;
 
-        // Set background to be visible
-        this._toggleBackground(false);
+        // Set container to be visible
+        this._toggleContainer(false);
+
+        this.containerEl.classList.remove(
+            this.settings.containerActiveClass
+        );
 
         // Add class to modal
-        this.container.classList.remove(
-            this.settings.activeClass
-        );
+        this.modalEl.classList.remove(this.settings.activeClass);
+    }
+
+    get getModalStatus() {
+        return this.state;
     }
 }
 
