@@ -129,8 +129,10 @@ class BadgerModal {
 
     // @TODO:
     // ** General **
-    // How would you like your modal position?
-    // Aside from
+    // Aside from open, closing, toggling and modal state, whatother methods would you use?
+    // How would you expect a modal to be positioned by default?
+    // How would you want to position your modal? * Adding class to modal * Custom CSS * Other
+
 
     // ** JS **
     // Move focus after closing modal
@@ -176,7 +178,8 @@ class BadgerModal {
         this.modalEl.classList.remove(this.settings.activeClass);
     }
 
-    get getModalStatus() {
+    // get getModalStatus() {
+    getModalStatus() {
         return this.state;
     }
 }
