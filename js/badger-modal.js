@@ -42,6 +42,8 @@ class BadgerModal {
                 return `.js-${this.nameSpace}-trigger`;
             },
 
+            escClose: true,
+            clickOffModalClose: true,
             openOnLoad: false
         };
 
@@ -104,6 +106,16 @@ class BadgerModal {
                 this.toggleModal(modalSelector);
             });
         });
+
+        // Adding eventListener to close modal when using esc key
+        if (this.settings.escClose) {
+            this._closeModalWithEscapeKey();
+        }
+
+        // Adding eventListener to close modal when clicking outside modal
+        if (this.settings.clickOffModalClose) {
+            this._closeModalWhenClickOutside();
+        }
     }
 
     _finishInitialization() {
@@ -128,6 +140,19 @@ class BadgerModal {
                 modal.classList.contains(this.settings.initalizedClass)) ||
             false
         );
+    }
+
+    _closeModalWithEscapeKey() {
+        document.onkeydown = evt => {
+            evt = evt || window.event;
+            if (evt.keyCode == 27) {
+                this.closeModal();
+            }
+        };
+    }
+
+    _closeModalWhenClickOutside() {
+        // https://gomakethings.com/checking-event-target-selectors-with-event-bubbling-in-vanilla-javascript/
     }
 
     // @TODO:
