@@ -38,8 +38,8 @@
                 get containerActiveClass() {
                     return `${this.containerClass}--active`;
                 },
-                get initalizedClass() {
-                    return `${this.nameSpace}--initalized`;
+                get initializedClass() {
+                    return `${this.nameSpace}--initialized`;
                 },
                 get triggerClass() {
                     return `.js-${this.nameSpace}-trigger`;
@@ -122,7 +122,7 @@
         }
 
         _finishInitialization() {
-            this.modalEl.classList.add(this.settings.initalizedClass);
+            this.modalEl.classList.add(this.settings.initializedClass);
         }
 
         _toggleContainer(toggle = true) {
@@ -140,7 +140,7 @@
 
             return (
                 (modal !== null &&
-                    modal.classList.contains(this.settings.initalizedClass)) ||
+                    modal.classList.contains(this.settings.initializedClass)) ||
                 false
             );
         }
@@ -156,6 +156,16 @@
 
         _closeModalWhenClickOutside() {
             // https://gomakethings.com/checking-event-target-selectors-with-event-bubbling-in-vanilla-javascript/
+            // @TODO: Review if should be using event bubbling here and in other places...
+
+            // 1. Adding click listener to modal container
+            this.containerEl.addEventListener('click', (event) => {
+                // 2. Checking if the element that has been clicked is the modal container
+                if (event.target.classList.contains(this.settings.containerActiveClass)) {
+                    // 3. If it is the modal container then close the modal 
+                    this.closeModal();
+                }
+            });
         }
 
         // @TODO:
