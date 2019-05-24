@@ -1,4 +1,5 @@
 import scss from 'rollup-plugin-scss';
+import serve from 'rollup-plugin-serve'
 
 module.exports = {
     input: 'js/behaviour.js',
@@ -9,6 +10,7 @@ module.exports = {
     plugins: [
         scss({
             output: 'css/badger-modal.css'
-        })
+        }),
+        serve('./')
     ]
 }
