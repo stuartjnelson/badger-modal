@@ -35,8 +35,8 @@ class BadgerModal {
             get containerActiveClass() {
                 return `${this.containerClass}--active`;
             },
-            get initalizedClass() {
-                return `${this.nameSpace}--initalized`;
+            get initializedClass() {
+                return `${this.nameSpace}--initialized`;
             },
             get triggerClass() {
                 return `.js-${this.nameSpace}-trigger`;
@@ -119,7 +119,7 @@ class BadgerModal {
     }
 
     _finishInitialization() {
-        this.modalEl.classList.add(this.settings.initalizedClass);
+        this.modalEl.classList.add(this.settings.initializedClass);
     }
 
     _toggleContainer(toggle = true) {
@@ -137,7 +137,7 @@ class BadgerModal {
 
         return (
             (modal !== null &&
-                modal.classList.contains(this.settings.initalizedClass)) ||
+                modal.classList.contains(this.settings.initializedClass)) ||
             false
         );
     }
