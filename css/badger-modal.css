@@ -8,7 +8,9 @@
   right: 0;
   top: 0; }
   .badger-modal-container--active {
-    display: block; }
+    align-items: center;
+    display: flex;
+    justify-content: center; }
 
 .badger-modal {
   border: solid 2px #c2c2c2;
