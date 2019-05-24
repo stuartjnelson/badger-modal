@@ -176,10 +176,12 @@
         // How would you want to position your modal? * Adding class to modal * Custom CSS * Other
 
         // ** JS **
-        // When open move focus to the modal itself
-        // Disable being able to `tab` to any content that isnt the modal when it is open
-        // Move focus after closing modal to element that opened it. If this isn't
+        // // When open move focus to the modal itself
+        // * Disable being able to `tab` to any content that isnt the modal when it is open
+        // * Move focus after closing modal to element that opened it. If this isn't
         // possible then move focus to somewhere logical...
+        // * Move focus when opening to a specific element
+        // * Add class for positioning
 
         // When tabbing inside modal then moving focus from last focusable element to next focusable element
 
