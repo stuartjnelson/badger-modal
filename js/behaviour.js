@@ -1,7 +1,9 @@
 import BadgerModal from './badger-modal';
 import '../scss/badger-modal.scss';
 
-const modal = new BadgerModal('.js-badger-modal');
+const modal = new BadgerModal(".js-badger-modal", {
+    // onOpenFocusOnElement: '.js-focus-first'
+});
 
 // setTimeout(() => {
 //     modal.openModal();

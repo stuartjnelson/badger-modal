@@ -44,10 +44,11 @@
                 get triggerClass() {
                     return `.js-${this.nameSpace}-trigger`;
                 },
-
+                
                 escClose: true,
                 clickOffModalClose: true,
-                openOnLoad: false
+                openOnLoad: false,
+                onOpenFocusOnElement: '',
             };
 
             // Merging options with defaults
@@ -168,6 +169,14 @@
             });
         }
 
+        keepFocusInsideModal() {
+            // gomakethings.com/how-to-get-the-first-and-last-focusable-elements-in-the-dom/    
+            https: var focusable = document.querySelectorAll(
+                'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+            );
+            var firstFocusable = focusable[0];
+        }
+
         // @TODO:
         // https://developer.paciellogroup.com/blog/2018/06/the-current-state-of-modal-dialog-accessibility/
         // ** General **
@@ -212,7 +221,20 @@
             // Add class to modal
             this.modalEl.classList.add(this.settings.activeClass);
 
-            this.modalEl.focus();
+            // Moving focus to the modal
+            if (this.settings.onOpenFocusOnElement.length) {
+                console.log(
+                    this.modalEl.querySelector(
+                        this.settings.onOpenFocusOnElement
+                    )
+                );
+                // debugger;
+                const focusEl = this.modalEl
+                    .querySelector(this.settings.onOpenFocusOnElement);
+                focusEl.focus();
+            } else {
+                this.modalEl.focus();
+            }
         }
 
         closeModal() {
@@ -238,7 +260,9 @@
         }
     }
 
-    const modal = new BadgerModal('.js-badger-modal');
+    const modal = new BadgerModal(".js-badger-modal", {
+        // onOpenFocusOnElement: '.js-focus-first'
+    });
 
     // setTimeout(() => {
     //     modal.openModal();
