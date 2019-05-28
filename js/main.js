@@ -44,6 +44,12 @@
                 get triggerClass() {
                     return `.js-${this.nameSpace}-trigger`;
                 },
+                get firstFocusElClass() {
+                    return `js-${this.nameSpace}-first-focusable`;
+                },
+                get lastFocusElClass() {
+                    return `js-${this.nameSpace}-last-focusable`;
+                },
                 
                 escClose: true,
                 clickOffModalClose: true,
@@ -169,12 +175,57 @@
             });
         }
 
-        keepFocusInsideModal() {
-            // gomakethings.com/how-to-get-the-first-and-last-focusable-elements-in-the-dom/    
-            https: var focusable = document.querySelectorAll(
-                'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+        _setupFocusableListener() {
+            // 1. Adding keydown listener
+            document.addEventListener('keydown', (event) => {
+                // 2. If key being used is the tab key then first method
+                if(event.keyCode === 9) {
+                    this._keepFocusInsideModal(event);
+                }
+            });
+        }
+
+        _removeFocusableListener() {
+            document.removeEventListener('keydown');
+        }
+
+        _keepFocusInsideModal(event) {
+            // 1. Getting all focusable elements from inside modal
+            // https://gomakethings.com/how-to-get-the-first-and-last-focusable-elements-in-the-dom/
+            // https://github.com/scottaohara/accessible_modal_window/blob/master/index.js
+            const focusable = this.modalEl.querySelectorAll(
+                'button:not([hidden]):not([disabled]), [href]:not([hidden]), input:not([hidden]):not([type="hidden"]):not([disabled]), select:not([hidden]):not([disabled]), textarea:not([hidden]):not([disabled]), [tabindex="0"]:not([hidden]):not([disabled]), summary:not([hidden]), [contenteditable]:not([hidden]), audio[controls]:not([hidden]), video[controls]:not([hidden])'
             );
-            var firstFocusable = focusable[0];
+            
+            // 2. Adding class to first and last focusable element inside the active modal
+            // @TODO: Check here that modal is active?
+            // @TODO: Should these selectors be removed when closing...
+            const firstFocusable = focusable[0];
+            firstFocusable.classList.add(this.settings.firstFocusElClass);
+
+            const lastFocusable = focusable[focusable.length - 1];
+            lastFocusable.classList.add(this.settings.lastFocusElClass);
+
+
+            // 3. Checking if activeElement is the last focusable element.
+            //    If it is and shift key is not being used (not cycling reverse tab order)
+            //    then focus on the first focusable element inside active modal. 
+            if ( document.activeElement.classList.contains(this.settings.lastFocusElClass) ) {
+                if ( event.keyCode === 9 && !event.shiftKey ) {
+                    event.preventDefault();
+                    firstFocusable.focus();
+                }
+            }
+
+            // 4. Checking if activeElement is the first focusable element.
+            //    If it is and shift key is being used (cycling reverse tab order)
+            //    then focus on the last focusable element inside active modal.
+            if ( document.activeElement.classList.contains(this.settings.firstFocusElClass) ) {
+                if ( event.keyCode === 9 && event.shiftKey ) {
+                    event.preventDefault();
+                    lastFocusable.focus();
+                }
+            }
         }
 
         // @TODO:
@@ -195,8 +246,6 @@
         // When tabbing inside modal then moving focus from last focusable element to next focusable element
 
         toggleModal(modalSelector) {
-            // debugger;
-
             if (this._checkIfBadgerModal(modalSelector)) {
                 if (this.state) {
                     this.closeModal(modalSelector);
@@ -209,6 +258,9 @@
         openModal() {
             // Update modals state
             this.state = true;
+
+            // Setting up cycling of focus inside active modal
+            this._setupFocusableListener();
 
             // Set container to be visible
             this._toggleContainer();
@@ -228,7 +280,7 @@
                         this.settings.onOpenFocusOnElement
                     )
                 );
-                // debugger;
+
                 const focusEl = this.modalEl
                     .querySelector(this.settings.onOpenFocusOnElement);
                 focusEl.focus();
@@ -250,6 +302,9 @@
 
             // Add class to modal
             this.modalEl.classList.remove(this.settings.activeClass);
+
+            // Removing keydown event listener
+            this._removeFocusableListener();
 
             // Move focus to trigger element
         }
