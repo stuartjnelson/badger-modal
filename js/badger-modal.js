@@ -307,7 +307,7 @@ class BadgerModal {
     }
 
     // get getModalStatus() {
-    getModalStatus() {
+    get getModalStatus() {
         return this.state;
     }
 }
