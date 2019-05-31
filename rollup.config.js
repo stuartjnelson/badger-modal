@@ -4,11 +4,13 @@ import replace from 'rollup-plugin-replace';
 import babel from 'rollup-plugin-babel';
 import { terser } from "rollup-plugin-terser";
 
-const output = [
-    {
-        file: 'js/main.js',
-        format: 'iife' // @TODO: Change for release
-    },
+const outputDev = {
+    file: 'js/main.js',
+    format: 'iife' // @TODO: Change for release
+};
+
+const outputBuild = [
+    
     {
         file: (process.env.NODE_ENV === 'production' && 'dist/badger-modal.min.js' || 'dist/badger-modal.js'),
         format: 'umd'
@@ -22,7 +24,7 @@ const output = [
 
 module.exports = {
     input: 'js/behaviour.js',
-    output,
+    output: (process.env.NODE_ENV !== 'production' ? outputDev : outputBuild),
     plugins: [
         (process.env.NODE_ENV !== 'production' && serve('./')),
         replace({
