@@ -186,7 +186,7 @@
         }
 
         _removeFocusableListener() {
-            document.removeEventListener('keydown');
+            document.removeEventListener('keydown', this._setupFocusableListener());
         }
 
         _keepFocusInsideModal(event) {
