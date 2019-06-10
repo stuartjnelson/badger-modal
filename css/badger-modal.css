@@ -19,8 +19,8 @@
     justify-content: center; }
 
 .badger-modal {
-  border: solid 2px #c2c2c2;
   background-color: #fff;
+  border: solid 2px #c2c2c2;
   display: flex;
   flex-direction: column;
   margin: 20px;
@@ -29,17 +29,16 @@
   z-index: 1000; }
   .badger-modal:focus {
     outline: solid #3498db 2px; }
-  .badger-modal--initalized {
+  .badger-modal--initialized {
     left: 50%;
+    opacity: 0;
     position: absolute;
     top: 50%;
-    opacity: 0;
     transform: translate3d(-100vw, -50%, 0);
-    transition: transform linear 0.01s 0.25s, opacity ease-in-out 0.25s; }
-    .badger-modal--initalized.badger-modal--active {
+    transition: opacity ease-in-out 0.25s 0.05s; }
+    .badger-modal--initialized.badger-modal--active {
       opacity: 1;
-      transform: translate3d(-50%, -50%, 0);
-      transition: transform linear 0.01s, opacity ease-in-out 0.25s 0.01s; }
+      transform: translate3d(-50%, -50%, 0); }
 
 .badger-modal__trigger {
   scroll-behavior: smooth; }
