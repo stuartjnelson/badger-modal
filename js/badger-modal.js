@@ -263,17 +263,19 @@ class BadgerModal {
 
         this.modalEl.setAttribute("tabIndex", "-1");
 
-        // Make container active
-        this.containerEl.classList.add(this.settings.containerActiveClass);
-
         // Add class to modal
         this.modalEl.classList.add(this.settings.activeClass);
 
         // Moving focus to the modal
         if (this.settings.onOpenFocusOnElement.length) {
-            const focusEl = this.modalEl
-                .querySelector(this.settings.onOpenFocusOnElement);
-            focusEl.focus();
+            const focusEl = this.modalEl.querySelector(this.settings.onOpenFocusOnElement);
+            
+            // Checking `focusEl` exists
+            if(focusEl !== null) {
+                focusEl.focus();
+            } else {
+                this.modalEl.focus();    
+            }
         } else {
             this.modalEl.focus();
         }
@@ -283,20 +285,35 @@ class BadgerModal {
         // Update modals state
         this.state = false;
 
-        // Set container to be visible
+        // Hiding container
         this._toggleContainer(false);
 
+        // Removing tabindex from modal
         this.modalEl.setAttribute("tabIndex", "0");
 
-        this.containerEl.classList.remove(this.settings.containerActiveClass);
-
-        // Add class to modal
+        // Remove class from modal
         this.modalEl.classList.remove(this.settings.activeClass);
 
         // Removing keydown event listener
         this._removeFocusableListener();
 
         // Move focus to trigger element
+        if(this.currentModalTrigger !== null) {
+            // debugger;
+            // Move focus to trigger
+            document.querySelector('.js-badger-modal-trigger').focus();
+
+            // Resetting currentModalTrigger
+            // this.currentModalTrigger = null
+            console.log( document.activeElement )
+        } else {
+            const body = document.body;
+
+            body.tabIndex = -1;
+
+            // Move focus to body
+            body.focus();
+        }
     }
 
     // get getModalStatus() {
