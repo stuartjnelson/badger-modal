@@ -7,7 +7,9 @@ const modal = new BadgerModal(".js-badger-modal", {
 
 // setTimeout(() => {
 //     modal.openModal();
+// }, 1000);
 
-//     console.log( modal.getModalStatus() );
-// }, 3000);
+// setTimeout(() => {
+//     modal.closeModal();
+// }, 2000);
 

@@ -314,16 +314,12 @@
         // onOpenFocusOnElement: '.js-focus-first'
     });
 
-    setTimeout(() => {
-        modal.openModal();
-
-        console.log( modal.getModalStatus() );
-    }, 1000);
+    // setTimeout(() => {
+    //     modal.openModal();
+    // }, 1000);
 
     // setTimeout(() => {
     //     modal.closeModal();
-
-    //     // console.log( modal.getModalStatus() );
     // }, 2000);
 
 }());
