@@ -72,6 +72,8 @@
 .badger-modal__trigger {
     scroll-behavior: smooth;
 
+    &:focus { outline: solid 2px #34495e; }
+
     &--close {
         display: flex;
         margin-left: auto;
