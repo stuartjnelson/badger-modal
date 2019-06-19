@@ -133,9 +133,7 @@ class BadgerModal {
         if (toggle) {
             this.containerEl.classList.add(this.settings.containerActiveClass);
         } else {
-            this.containerEl.classList.remove(
-                this.settings.containerActiveClass
-            );
+            this.containerEl.classList.remove(this.settings.containerActiveClass);
         }
     }
 
