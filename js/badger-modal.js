@@ -290,8 +290,7 @@ class BadgerModal {
             document.querySelector('.js-badger-modal-trigger').focus();
 
             // Resetting currentModalTrigger
-            // this.currentModalTrigger = null
-            console.log( document.activeElement )
+            this.currentModalTrigger = null
         } else {
             const body = document.body;
 
@@ -303,7 +302,7 @@ class BadgerModal {
     }
 
     // get getModalStatus() {
-    get getModalStatus() {
+    getModalStatus() {
         return this.state;
     }
 }

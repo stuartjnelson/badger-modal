@@ -227,23 +227,6 @@
             }
         }
 
-        // @TODO:
-        // https://developer.paciellogroup.com/blog/2018/06/the-current-state-of-modal-dialog-accessibility/
-        // ** General **
-        // Aside from open, closing, toggling and modal state, whatother methods would you use?
-        // How would you expect a modal to be positioned by default?
-        // How would you want to position your modal? * Adding class to modal * Custom CSS * Other
-
-        // ** JS **
-        // // When open move focus to the modal itself
-        // // * Disable being able to `tab` to any content that isnt the modal when it is open
-        // * Move focus after closing modal to element that opened it. If this isn't
-        //   possible then move focus to somewhere logical...
-        //      * Issue is when clicking to close focus is moved back to trigger but not focus styles...
-        //        Code been tested in isolation and works but here isn't working...
-        // // * Move focus when opening to a specific element
-
-        // When tabbing inside modal then moving focus from last focusable element to next focusable element
 
         toggleModal(modalSelector) {
             if (this._checkIfBadgerModal(modalSelector)) {
@@ -262,7 +245,7 @@
             this.state = true;
 
             // Setting up cycling of focus inside active modal
-            // this._setupFocusableListener();
+            this._setupFocusableListener();
 
             // Set container to be visible
             this._toggleContainer();
@@ -292,7 +275,7 @@
             this.state = false;
 
             // Removing keydown event listener
-            // this._removeFocusableListener();
+            this._removeFocusableListener();
 
             // Hiding container
             this._toggleContainer(false);
@@ -310,8 +293,7 @@
                 document.querySelector('.js-badger-modal-trigger').focus();
 
                 // Resetting currentModalTrigger
-                // this.currentModalTrigger = null
-                console.log( document.activeElement );
+                this.currentModalTrigger = null;
             } else {
                 const body = document.body;
 
@@ -323,7 +305,7 @@
         }
 
         // get getModalStatus() {
-        get getModalStatus() {
+        getModalStatus() {
             return this.state;
         }
     }
@@ -332,10 +314,16 @@
         // onOpenFocusOnElement: '.js-focus-first'
     });
 
-    // setTimeout(() => {
-    //     modal.openModal();
+    setTimeout(() => {
+        modal.openModal();
 
-    //     console.log( modal.getModalStatus() );
-    // }, 3000);
+        console.log( modal.getModalStatus() );
+    }, 1000);
+
+    // setTimeout(() => {
+    //     modal.closeModal();
+
+    //     // console.log( modal.getModalStatus() );
+    // }, 2000);
 
 }());
