@@ -76,6 +76,8 @@ class BadgerModal {
                 : undefined;
         this.state = this.settings.openOnLoad || false;
 
+        this.currentModalTrigger = null;
+
         this.init();
     }
 
@@ -244,6 +246,8 @@ class BadgerModal {
             if (this.state) {
                 this.closeModal(modalSelector);
             } else {
+                this.currentModalTrigger = modalSelector;
+
                 this.openModal(modalSelector);
             }
         }
@@ -254,7 +258,7 @@ class BadgerModal {
         this.state = true;
 
         // Setting up cycling of focus inside active modal
-        this._setupFocusableListener();
+        // this._setupFocusableListener();
 
         // Set container to be visible
         this._toggleContainer();
@@ -283,6 +287,9 @@ class BadgerModal {
         // Update modals state
         this.state = false;
 
+        // Removing keydown event listener
+        // this._removeFocusableListener();
+
         // Hiding container
         this._toggleContainer(false);
 
@@ -291,9 +298,6 @@ class BadgerModal {
 
         // Remove class from modal
         this.modalEl.classList.remove(this.settings.activeClass);
-
-        // Removing keydown event listener
-        this._removeFocusableListener();
 
         // Move focus to trigger element
         if(this.currentModalTrigger !== null) {
