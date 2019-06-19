@@ -79,6 +79,8 @@
                     : undefined;
             this.state = this.settings.openOnLoad || false;
 
+            this.currentModalTrigger = null;
+
             this.init();
         }
 
@@ -136,9 +138,7 @@
             if (toggle) {
                 this.containerEl.classList.add(this.settings.containerActiveClass);
             } else {
-                this.containerEl.classList.remove(
-                    this.settings.containerActiveClass
-                );
+                this.containerEl.classList.remove(this.settings.containerActiveClass);
             }
         }
 
@@ -191,7 +191,6 @@
 
         _keepFocusInsideModal(event) {
             // 1. Getting all focusable elements from inside modal
-            // https://gomakethings.com/how-to-get-the-first-and-last-focusable-elements-in-the-dom/
             // https://github.com/scottaohara/accessible_modal_window/blob/master/index.js
             const focusable = this.modalEl.querySelectorAll(
                 'button:not([hidden]):not([disabled]), [href]:not([hidden]), input:not([hidden]):not([type="hidden"]):not([disabled]), select:not([hidden]):not([disabled]), textarea:not([hidden]):not([disabled]), [tabindex="0"]:not([hidden]):not([disabled]), summary:not([hidden]), [contenteditable]:not([hidden]), audio[controls]:not([hidden]), video[controls]:not([hidden])'
@@ -237,11 +236,12 @@
 
         // ** JS **
         // // When open move focus to the modal itself
-        // * Disable being able to `tab` to any content that isnt the modal when it is open
+        // // * Disable being able to `tab` to any content that isnt the modal when it is open
         // * Move focus after closing modal to element that opened it. If this isn't
-        // possible then move focus to somewhere logical...
-        // * Move focus when opening to a specific element
-        // * Add class for positioning
+        //   possible then move focus to somewhere logical...
+        //      * Issue is when clicking to close focus is moved back to trigger but not focus styles...
+        //        Code been tested in isolation and works but here isn't working...
+        // // * Move focus when opening to a specific element
 
         // When tabbing inside modal then moving focus from last focusable element to next focusable element
 
@@ -250,6 +250,8 @@
                 if (this.state) {
                     this.closeModal(modalSelector);
                 } else {
+                    this.currentModalTrigger = modalSelector;
+
                     this.openModal(modalSelector);
                 }
             }
@@ -260,30 +262,26 @@
             this.state = true;
 
             // Setting up cycling of focus inside active modal
-            this._setupFocusableListener();
+            // this._setupFocusableListener();
 
             // Set container to be visible
             this._toggleContainer();
 
             this.modalEl.setAttribute("tabIndex", "-1");
 
-            // Make container active
-            this.containerEl.classList.add(this.settings.containerActiveClass);
-
             // Add class to modal
             this.modalEl.classList.add(this.settings.activeClass);
 
             // Moving focus to the modal
             if (this.settings.onOpenFocusOnElement.length) {
-                console.log(
-                    this.modalEl.querySelector(
-                        this.settings.onOpenFocusOnElement
-                    )
-                );
-
-                const focusEl = this.modalEl
-                    .querySelector(this.settings.onOpenFocusOnElement);
-                focusEl.focus();
+                const focusEl = this.modalEl.querySelector(this.settings.onOpenFocusOnElement);
+                
+                // Checking `focusEl` exists
+                if(focusEl !== null) {
+                    focusEl.focus();
+                } else {
+                    this.modalEl.focus();    
+                }
             } else {
                 this.modalEl.focus();
             }
@@ -293,20 +291,35 @@
             // Update modals state
             this.state = false;
 
-            // Set container to be visible
+            // Removing keydown event listener
+            // this._removeFocusableListener();
+
+            // Hiding container
             this._toggleContainer(false);
 
+            // Removing tabindex from modal
             this.modalEl.setAttribute("tabIndex", "0");
 
-            this.containerEl.classList.remove(this.settings.containerActiveClass);
-
-            // Add class to modal
+            // Remove class from modal
             this.modalEl.classList.remove(this.settings.activeClass);
 
-            // Removing keydown event listener
-            this._removeFocusableListener();
-
             // Move focus to trigger element
+            if(this.currentModalTrigger !== null) {
+                // debugger;
+                // Move focus to trigger
+                document.querySelector('.js-badger-modal-trigger').focus();
+
+                // Resetting currentModalTrigger
+                // this.currentModalTrigger = null
+                console.log( document.activeElement );
+            } else {
+                const body = document.body;
+
+                body.tabIndex = -1;
+
+                // Move focus to body
+                body.focus();
+            }
         }
 
         // get getModalStatus() {
