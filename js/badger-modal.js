@@ -188,7 +188,6 @@ class BadgerModal {
 
     _keepFocusInsideModal(event) {
         // 1. Getting all focusable elements from inside modal
-        // https://gomakethings.com/how-to-get-the-first-and-last-focusable-elements-in-the-dom/
         // https://github.com/scottaohara/accessible_modal_window/blob/master/index.js
         const focusable = this.modalEl.querySelectorAll(
             'button:not([hidden]):not([disabled]), [href]:not([hidden]), input:not([hidden]):not([type="hidden"]):not([disabled]), select:not([hidden]):not([disabled]), textarea:not([hidden]):not([disabled]), [tabindex="0"]:not([hidden]):not([disabled]), summary:not([hidden]), [contenteditable]:not([hidden]), audio[controls]:not([hidden]), video[controls]:not([hidden])'
@@ -234,9 +233,9 @@ class BadgerModal {
 
     // ** JS **
     // // When open move focus to the modal itself
-    // * Disable being able to `tab` to any content that isnt the modal when it is open
+    // // * Disable being able to `tab` to any content that isnt the modal when it is open
     // * Move focus after closing modal to element that opened it. If this isn't
-    // possible then move focus to somewhere logical...
+    //   possible then move focus to somewhere logical...
     // * Move focus when opening to a specific element
     // * Add class for positioning
 
@@ -272,12 +271,6 @@ class BadgerModal {
 
         // Moving focus to the modal
         if (this.settings.onOpenFocusOnElement.length) {
-            console.log(
-                this.modalEl.querySelector(
-                    this.settings.onOpenFocusOnElement
-                )
-            );
-
             const focusEl = this.modalEl
                 .querySelector(this.settings.onOpenFocusOnElement);
             focusEl.focus();
