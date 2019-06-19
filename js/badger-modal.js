@@ -236,8 +236,9 @@ class BadgerModal {
     // // * Disable being able to `tab` to any content that isnt the modal when it is open
     // * Move focus after closing modal to element that opened it. If this isn't
     //   possible then move focus to somewhere logical...
-    // * Move focus when opening to a specific element
-    // * Add class for positioning
+    //      * Issue is when clicking to close focus is moved back to trigger but not focus styles...
+    //        Code been tested in isolation and works but here isn't working...
+    // // * Move focus when opening to a specific element
 
     // When tabbing inside modal then moving focus from last focusable element to next focusable element
 
