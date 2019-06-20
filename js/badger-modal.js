@@ -105,9 +105,9 @@ class BadgerModal {
         }
 
         // Adding eventListener to close modal when clicking outside modal
-        if (this.settings.clickOffModalClose) {
-            this._closeModalWhenClickOutside();
-        }
+        // if (this.settings.clickOffModalClose) {
+        //     this._closeModalWhenClickOutside();
+        // }
     }
 
     _finishInitialization() {
@@ -229,8 +229,14 @@ class BadgerModal {
 
         this.modalEl.setAttribute("tabIndex", "-1");
 
-        // Add class to modal
+        // Add class to modal & body
         this.modalEl.classList.add(this.settings.activeClass);
+        this.body.classList.add(this.settings.activeClass);
+
+        // Adding eventListener to close modal when clicking outside modal
+        if (this.settings.clickOffModalClose) {
+            this._closeModalWhenClickOutside();
+        }
 
         // Moving focus to the modal
         if (this.settings.onOpenFocusOnElement.length) {
@@ -259,6 +265,7 @@ class BadgerModal {
 
         // Remove class from modal
         this.modalEl.classList.remove(this.settings.activeClass);
+        this.body.classList.remove(this.settings.activeClass);
 
         // Move focus to trigger element
         if(this.currentModalTrigger !== null) {
