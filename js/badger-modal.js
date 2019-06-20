@@ -216,7 +216,6 @@ class BadgerModal {
     _toggleNoneModelElementsInert(action = true) {
         Array.from(this.noneModalNodes).forEach(node => {
             const modalClass = this.removeClassSelectorFromClass(this.settings.modalClass);
-            debugger;
 
             // Check for if not modal...
             if( !node.classList.contains(modalClass) ) {
@@ -240,8 +239,7 @@ class BadgerModal {
     // This is needed so can make none-modal elements not focusable
     _moveModalToBodyChild() {
 		const bodyFirstChild = this.body.firstElementChild || null;
-        debugger;
-        
+
 		this.body.insertBefore( this.modalEl, bodyFirstChild );
 	};
 
@@ -310,7 +308,6 @@ class BadgerModal {
 
         // Move focus to trigger element
         if(this.currentModalTrigger !== null) {
-            // debugger;
             // Move focus to trigger
             document.querySelector('.js-badger-modal-trigger').focus();
 
