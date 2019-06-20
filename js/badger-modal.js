@@ -50,7 +50,6 @@ class BadgerModal {
         // Merging options with defaults
         this.settings = Object.assign({}, defaults, options);
 
-        // 
         // Setting up data
         this.modalEl = modalEl;
 
@@ -62,7 +61,8 @@ class BadgerModal {
 
         this.currentModalTrigger = null;
 
-        // this.noneModalNodes = document.querySelectorAll('body > ')
+        // Seleting all child nodes of body that are not modal
+        this.noneModalNodes = document.querySelectorAll(`body > *:not(${this.settings.modalClass})`);
 
         this.init();
     }
@@ -73,6 +73,8 @@ class BadgerModal {
         this._setupAttributes();
 
         this.addListeners();
+
+        this._moveModalToBodyChild()
 
         this._finishInitialization();
     }
@@ -211,6 +213,39 @@ class BadgerModal {
     }
 
 
+    _toggleNoneModelElementsInert(action = true) {
+        Array.from(this.noneModalNodes).forEach(node => {
+            const modalClass = this.removeClassSelectorFromClass(this.settings.modalClass);
+            debugger;
+
+            // Check for if not modal...
+            if( !node.classList.contains(modalClass) ) {
+                if ( node.hasAttribute('aria-hidden') ) {
+                    node.setAttribute('data-keep-hidden', node.getAttribute('aria-hidden') );
+                }
+                node.setAttribute('aria-hidden', 'true');
+            }
+
+            if ( node.getAttribute('inert') ) {
+                node.setAttribute('data-keep-inert', '');
+            }
+            else {
+                node.setAttribute('inert', 'true');
+            }
+        });
+    }
+
+
+    // This moves modals to be the first child of `body`
+    // This is needed so can make none-modal elements not focusable
+    _moveModalToBodyChild() {
+		const bodyFirstChild = this.body.firstElementChild || null;
+        debugger;
+        
+		this.body.insertBefore( this.modalEl, bodyFirstChild );
+	};
+
+
     toggleModal(modalSelector) {
         if (this._checkIfBadgerModal(modalSelector)) {
             if (this.state) {
@@ -226,6 +261,9 @@ class BadgerModal {
     openModal() {
         // Update modals state
         this.state = true;
+
+        // Preventing any none-modal elements from being able to receive focus
+        this._toggleNoneModelElementsInert();
 
         // Setting up cycling of focus inside active modal
         this._setupFocusableListener();
