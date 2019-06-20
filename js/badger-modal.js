@@ -16,7 +16,7 @@ class BadgerModal {
         // If el is not defined
         if (modalEl === null) {
             console.log(
-                new Error(`Modal container ${modalEl} element cannot be found`)
+                new Error(`Modal element ${modalEl} element cannot be found`)
             );
         }
 
@@ -24,17 +24,7 @@ class BadgerModal {
             nameSpace: "badger-modal",
             get activeClass() {
                 return `${this.nameSpace}--active`;
-            },
-
-            get containerClass() {
-                return `${this.nameSpace}-container`;
-            },
-            get containerSelector() {
-                return `.js-${this.containerClass}`;
-            },
-            get containerActiveClass() {
-                return `${this.containerClass}--active`;
-            },
+            }, 
             get initializedClass() {
                 return `${this.nameSpace}--initialized`;
             },
@@ -57,26 +47,19 @@ class BadgerModal {
         // Merging options with defaults
         this.settings = Object.assign({}, defaults, options);
 
+        // 
         // Setting up data
         this.modalEl = modalEl;
-        this.containerId = this.modalEl.getAttribute("id");
-        this.containerEl =
-            this.settings.containerSelector !== undefined
-                ? document.querySelector(this.settings.containerSelector)
-                : console.log(
-                      new Error`your container element ${
-                          this.settings.containerSelector
-                      } cannont be found`()
-                  );
-        this.triggers =
-            this.settings.triggerClass !== undefined
-                ? Array.from(
-                      document.querySelectorAll(this.settings.triggerClass)
-                  )
-                : undefined;
+
+        this.body = document.body;
+
+        this.triggers = (this.settings.triggerClass !== undefined ? Array.from(document.querySelectorAll(this.settings.triggerClass)) : undefined);
+
         this.state = this.settings.openOnLoad || false;
 
         this.currentModalTrigger = null;
+
+        // this.noneModalNodes = document.querySelectorAll('body > ')
 
         this.init();
     }
@@ -131,13 +114,6 @@ class BadgerModal {
         this.modalEl.classList.add(this.settings.initializedClass);
     }
 
-    _toggleContainer(toggle = true) {
-        if (toggle) {
-            this.containerEl.classList.add(this.settings.containerActiveClass);
-        } else {
-            this.containerEl.classList.remove(this.settings.containerActiveClass);
-        }
-    }
 
     _checkIfBadgerModal(selector) {
         const modal = document.querySelector(selector);
@@ -162,14 +138,21 @@ class BadgerModal {
         // https://gomakethings.com/checking-event-target-selectors-with-event-bubbling-in-vanilla-javascript/
         // @TODO: Review if should be using event bubbling here and in other places...
 
-        // 1. Adding click listener to modal container
-        this.containerEl.addEventListener('click', (event) => {
-            // 2. Checking if the element that has been clicked is the modal container
-            if (event.target.classList.contains(this.settings.containerActiveClass)) {
-                // 3. If it is the modal container then close the modal 
-                this.closeModal();
+        // 1. Adding click listener to document
+        document.addEventListener('click', (e) => {
+            // 1. Getting trigger class without `.`
+            const triggerClass = this.removeClassSelectorFromClass(this.settings.triggerClass);
+
+            // 2. Checking if modal is open & click is not on modal trigger 
+            if (this.state && !e.target.classList.contains( triggerClass )) {
+                const isClickInside = this.modalEl.contains(e.target);
+
+                // 3. If click the element that has been clicked is not the modal & not an alert
+                if ( !isClickInside && this.modalEl.getAttribute('role') !== 'alertdialog') {
+                    this.closeModal();
+                }
             }
-        });
+        }, false);
     }
 
     _setupFocusableListener() {
@@ -244,9 +227,6 @@ class BadgerModal {
         // Setting up cycling of focus inside active modal
         this._setupFocusableListener();
 
-        // Set container to be visible
-        this._toggleContainer();
-
         this.modalEl.setAttribute("tabIndex", "-1");
 
         // Add class to modal
@@ -273,9 +253,6 @@ class BadgerModal {
 
         // Removing keydown event listener
         this._removeFocusableListener();
-
-        // Hiding container
-        this._toggleContainer(false);
 
         // Removing tabindex from modal
         this.modalEl.setAttribute("tabIndex", "0");
@@ -304,6 +281,10 @@ class BadgerModal {
     // get getModalStatus() {
     getModalStatus() {
         return this.state;
+    }
+
+    removeClassSelectorFromClass(str) {
+        return str.replace('.', '');
     }
 }
 
