@@ -22,6 +22,9 @@ class BadgerModal {
 
         const defaults = {
             nameSpace: "badger-modal",
+            get modalClass() {
+                return `.js-${this.nameSpace}`;
+            },
             get activeClass() {
                 return `${this.nameSpace}--active`;
             }, 
